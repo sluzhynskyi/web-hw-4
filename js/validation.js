@@ -5,17 +5,15 @@ function email_validation() {
     let emailErrors = document.createElement('ul');
     emailErrors.setAttribute("role", "alert");
 
-    max_length(emailErrors, emailNode.value, 5,'Email is to short');
+    max_length(emailErrors, emailNode.value, 5, 'Email is to short');
     if (emailNode.value.length > 64) {
         let li = document.createElement('li')
         li.innerText = 'Email is to long';
         emailErrors.appendChild(li);
     }
-    if (!emailNode.value.match('^[a-zA-Z0-9]([a-zA-Z0-9_\\-.!#$%&\'*+\\-\\/=?^_`{|]+)[a-zA-Z0-9]@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')) {
-        let li = document.createElement('li');
-        li.innerText = 'Email format is incorrect';
-        emailErrors.appendChild(li);
-    }
+    format(emailErrors, emailNode.value,
+        '^[a-zA-Z0-9]([a-zA-Z0-9_\\-.!#$%&\'*+\\-\\/=?^_`{|]+)[a-zA-Z0-9]@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$',
+        'Email format is incorrect');
     if (emailErrors.childElementCount > 0) {
         emailErrorNode.appendChild(emailErrors);
         return false;
@@ -29,12 +27,10 @@ function phone_validation() {
     let phoneErrors = document.createElement('ul');
     phoneErrors.setAttribute("role", "alert");
 
-    max_length(phoneErrors, phoneNode.value, 12,'Phone number is to short');
-    if (!phoneNode.value.match('^(\\+380(\\([0-9]{2}\\)|[0-9]{2}|-[0-9]{2}))(( [0-9]{3}){1}( [0-9]{2}){2}|(-[0-9]{3}){1}(-[0-9]{2}){2}|([0-9]{7})$)')) {
-        let li = document.createElement('li')
-        li.innerText = 'Phone number format is incorrect';
-        phoneErrors.appendChild(li);
-    }
+    max_length(phoneErrors, phoneNode.value, 12, 'Phone number is to short');
+    format(phoneErrors, phoneNode.value,
+        '^(\\+380(\\([0-9]{2}\\)|[0-9]{2}|-[0-9]{2}))(( [0-9]{3}){1}( [0-9]{2}){2}|(-[0-9]{3}){1}(-[0-9]{2}){2}|([0-9]{7})$)',
+        'Phone number format is incorrect')
     if (phoneErrors.childElementCount > 0) {
         phoneErrorNode.appendChild(phoneErrors);
         return false;
@@ -49,13 +45,9 @@ function name_validation() {
     let nameErrors = document.createElement('ul');
     nameErrors.setAttribute("role", "alert");
 
-    max_length(nameErrors, nameNode.value, 1,'Name is to short');
-    if (!nameNode.value.match('(^([a-zA-Z]+( ){0}|( ){2})+)$')) {
-        let li = document.createElement('li');
-        li.innerText = 'Name format is incorrect (Should be two spaces between words)';
-        nameErrors.appendChild(li);
-    }
+    max_length(nameErrors, nameNode.value, 1, 'Name is to short');
 
+    format(nameErrors, nameNode.value, '(^([a-zA-Z]+( ){0}|( ){2})+)$', 'Name format is incorrect (Should be two spaces between words)');
 
     if (nameErrors.childElementCount > 0) {
         nameErrorNode.appendChild(nameErrors);
@@ -70,12 +62,9 @@ function message_validation() {
     let messageErrors = document.createElement('ul');
     messageErrors.setAttribute("role", "alert");
 
-    max_length(messageErrors, messageNode.value, 10,'Message is to short');
-    if (messageNode.value.toLowerCase().match('^.*ugly.*|.*damm.*|.*stupid.*|.*pig.*|.*ignorant.*$')) {
-        let li = document.createElement('li')
-        li.innerText = 'Message shouldn\'t contain rude words';
-        messageErrors.appendChild(li);
-    }
+    max_length(messageErrors, messageNode.value, 10, 'Message is to short');
+
+    format(messageErrors, messageNode.value.toLowerCase(), '^.*ugly.*|.*damm.*|.*stupid.*|.*pig.*|.*ignorant.*$', 'Message shouldn\'t contain rude words')
 
     if (messageErrors.childElementCount > 0) {
         messageErrorNode.appendChild(messageErrors);
@@ -83,8 +72,16 @@ function message_validation() {
     } else return true;
 }
 
-function max_length(nodeErrors, txt, maxL,errorMsg) {
+function max_length(nodeErrors, txt, maxL, errorMsg) {
     if (txt.length < maxL) {
+        let li = document.createElement('li');
+        li.innerText = errorMsg;
+        nodeErrors.appendChild(li);
+    }
+}
+
+function format(nodeErrors, txt, matchReg, errorMsg) {
+    if (!txt.match(matchReg)) {
         let li = document.createElement('li');
         li.innerText = errorMsg;
         nodeErrors.appendChild(li);
