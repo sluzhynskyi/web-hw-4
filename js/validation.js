@@ -64,7 +64,7 @@ function message_validation() {
 
     max_length(messageErrors, messageNode.value, 10, 'Message is to short');
 
-    format(messageErrors, messageNode.value.toLowerCase(), '^.*ugly.*|.*damm.*|.*stupid.*|.*pig.*|.*ignorant.*$', 'Message shouldn\'t contain rude words')
+    format(messageErrors, messageNode.value.toLowerCase(), '^(?!.*ugly.*)(?!.*damm.*)(?!.*stupid.*)(?!.*pig.*)(?!.*ignorant.*)', 'Message shouldn\'t contain rude words')
 
     if (messageErrors.childElementCount > 0) {
         messageErrorNode.appendChild(messageErrors);
