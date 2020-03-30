@@ -5,11 +5,7 @@ function email_validation() {
     let emailErrors = document.createElement('ul');
     emailErrors.setAttribute("role", "alert");
 
-    if (emailNode.value.length < 5) {
-        let li = document.createElement('li')
-        li.innerText = 'Email is to short';
-        emailErrors.appendChild(li);
-    }
+    max_length(emailErrors, emailNode.value, 5,'Email is to short');
     if (emailNode.value.length > 64) {
         let li = document.createElement('li')
         li.innerText = 'Email is to long';
@@ -33,11 +29,7 @@ function phone_validation() {
     let phoneErrors = document.createElement('ul');
     phoneErrors.setAttribute("role", "alert");
 
-    if (phoneNode.value.length < 12) {
-        let li = document.createElement('li')
-        li.innerText = 'Phone number is to short';
-        phoneErrors.appendChild(li);
-    }
+    max_length(phoneErrors, phoneNode.value, 12,'Phone number is to short');
     if (!phoneNode.value.match('^(\\+380(\\([0-9]{2}\\)|[0-9]{2}|-[0-9]{2}))(( [0-9]{3}){1}( [0-9]{2}){2}|(-[0-9]{3}){1}(-[0-9]{2}){2}|([0-9]{7})$)')) {
         let li = document.createElement('li')
         li.innerText = 'Phone number format is incorrect';
@@ -57,12 +49,8 @@ function name_validation() {
     let nameErrors = document.createElement('ul');
     nameErrors.setAttribute("role", "alert");
 
-    if (nameNode.value.length < 1) {
-        let li = document.createElement('li');
-        li.innerText = 'Name is to short';
-        nameErrors.appendChild(li);
-    }
-    if (!nameNode.value.match('(^([a-zA-Z]+( ){0}|( ){2})+)$')){
+    max_length(nameErrors, nameNode.value, 1,'Name is to short');
+    if (!nameNode.value.match('(^([a-zA-Z]+( ){0}|( ){2})+)$')) {
         let li = document.createElement('li');
         li.innerText = 'Name format is incorrect (Should be two spaces between words)';
         nameErrors.appendChild(li);
@@ -75,19 +63,15 @@ function name_validation() {
     } else return true;
 }
 
-function message_validation(){
+function message_validation() {
     const messageNode = document.getElementById('message');
     const messageErrorNode = messageNode.parentNode.querySelector('p.help-block');
     messageErrorNode.innerHTML = '';
     let messageErrors = document.createElement('ul');
     messageErrors.setAttribute("role", "alert");
 
-    if (messageNode.value.length < 10) {
-        let li = document.createElement('li');
-        li.innerText = 'Message is to short';
-        messageErrors.appendChild(li);
-    }
-    if(messageNode.value.toLowerCase().match('^.*ugly.*|.*damm.*|.*stupid.*|.*pig.*|.*ignorant.*$')){
+    max_length(messageErrors, messageNode.value, 10,'Message is to short');
+    if (messageNode.value.toLowerCase().match('^.*ugly.*|.*damm.*|.*stupid.*|.*pig.*|.*ignorant.*$')) {
         let li = document.createElement('li')
         li.innerText = 'Message shouldn\'t contain rude words';
         messageErrors.appendChild(li);
@@ -97,6 +81,14 @@ function message_validation(){
         messageErrorNode.appendChild(messageErrors);
         return false;
     } else return true;
+}
+
+function max_length(nodeErrors, txt, maxL,errorMsg) {
+    if (txt.length < maxL) {
+        let li = document.createElement('li');
+        li.innerText = errorMsg;
+        nodeErrors.appendChild(li);
+    }
 }
 
 function validateMe(event) {
